@@ -1,0 +1,450 @@
+---
+output:
+  html_document:
+    toc: no
+    toc_depth: 6
+    toc_float:
+      collapsed: yes
+    fig_width: 7
+    fig_height: 6
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+<style type="text/css">
+div.main-container {
+  max-width: 2000px;
+  margin-left: 0;
+  margin-right: auto;
+}
+</style>
+
+<style>
+.tocify {
+color: black;
+}
+<!-- } -->
+<!-- .tocify .tocify-header { -->
+<!--     position: fixed; -->
+<!--     <!-- top: 50px; --> -->
+<!--     left: 50px; -->
+<!--     width: 350px; -->
+<!--     <!-- border: solid 3px black; --> -->
+<!--     <!-- height: 200px; --> -->
+<!--  border: none; -->
+<!-- } -->
+.tocify .tocify-header .active {
+color: white;
+background: #d80b8c;
+font-weight: bold;
+}
+<!-- .tocify .tocify-item { -->
+<!-- background: white; -->
+<!-- color: black; -->
+<!--  border: none; -->
+<!-- } -->
+</style>
+
+
+<style>
+  .nav-pills>li>a:hover, .nav-pills>li>a:focus, .nav-pills>li.active>a,     .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus{
+     background-color: #212070;
+     }
+</style>
+
+<style>
+.container { width: 1800px; }
+h2 {
+  background-color: #dddedd;
+  color: black;
+  text-indent: 20px;
+  <!-- font-weight: bold; -->
+}
+h3 {
+  background-color: #f2f2f2;
+  color: black;
+  text-indent: 20px;
+  <!-- font-weight: bold; -->
+}
+h4 {
+  <!-- background-color: #dddedd; -->
+  <!-- color: black; -->
+  text-indent: 50px;
+  <!-- font-weight: bold; -->
+}
+</style>
+
+<style>
+.blackbox {
+  padding: 1em;
+  background: white;
+  color: black;
+  border: 2px solid #7f7f7f;
+  width: 100%;
+  position: center;
+  align: center;
+  margin: 0px auto;
+}
+.center {
+  text-align: left;
+  margin: 0px auto;
+}
+</style>
+
+
+<!-- ```{css toc-content, echo = FALSE} -->
+<!-- #TOC { -->
+<!--   right: 270px; -->
+<!--   margin: 20px 0px 25px 0px; -->
+<!-- } -->
+
+<!-- .main-container { -->
+<!--     margin-left: 200px; -->
+<!-- } -->
+<!-- ``` -->
+
+
+```{r Load Packages, echo = FALSE, warning = FALSE, message = FALSE}
+# # Load packages -----------------------------------------------------------------------------------
+suppressMessages({
+  memory.limit(size = 8000000)
+  library(readxl)
+  library(writexl)
+  library(plyr)
+  library(dplyr)
+  library(data.table)
+  library(zoo)
+  library(shiny)
+  library(shinydashboard)
+  library(shinydashboardPlus)
+  library(shinyWidgets)
+  library(htmlwidgets)
+  library(lubridate)
+  library(tcltk)
+  library(tidyverse)
+  library(plotly)
+  library(knitr)
+  library(kableExtra)
+  library(leaflet)
+  library(grid)
+  library(gridExtra)
+  library(eeptools)
+  library(ggQC)
+  library(zipcodeR)
+  library(utils)
+  library(scales)
+  library(chron)
+  library(bupaR)
+  library(shiny)
+  library(DT)
+  library(DiagrammeR)
+  library(shinyalert)
+  library(edeaR)
+  library(processmapR)
+  library(processmonitR)
+  library(processanimateR)
+  library(tidyr)
+  library(lubridate)
+  library(RColorBrewer)
+  library(DiagrammeR)
+  library(ggplot2)
+  library(leaflet)
+  library(readr)
+  library(highcharter)
+  library(ggforce) # for 'geom_arc_bar'
+  library(packcircles) # for packed circle graph
+  library(viridis)
+  library(ggiraph)
+  library(treemapify)
+  library(treemap)
+  library(broom)
+  library(extrafont)
+  library(tis) # for US holidays
+  library(vroom)
+  library(sjmisc)
+  library(tools)
+  library(here)
+  library(shinyBS)
+  library(shinyscreenshot)
+  library(fasttime)
+  library(shinycssloaders)
+  library(feather)
+  # library(zipcodeR)
+  library(formattable)
+  library(shinyjs)
+  library(janitor)
+  library(patchwork)
+  library(flexdashboard)
+  # library(tidyverse)
+  # library(viridis)
+  # library(hrbrthemes)
+  # library(plotly)
+  # install.packages("bsts")
+  library(bsts)
+  library(reactable)
+  # install.packages("reactablefmtr")
+  library(reactablefmtr)
+  library(svDialogs)
+  # library(openxlsx)
+  library(flextable)
+  library(officedown)
+  library(officer)
+  library(magrittr)
+  library(webshot) 
+  library(png)
+  library(ggh4x)
+  library(RODBC)
+  library(DBI)
+  library(odbc)
+  library(dbplyr)
+  library(pool)
+  library(emojifont)
+})
+
+```
+
+
+```{r Graph asthetics, echo = FALSE, warning = FALSE, message = FALSE}
+### Color Functions for Graphs ============================================================
+# Mount Sinai corporate colors "USE THIS TO ADD COLORS"
+MountSinai_colors <- c(
+  `dark purple`  = "#212070",
+  `dark pink`    = "#d80b8c",
+  `dark blue`    = "#00aeef",
+  `dark grey`    = "#7f7f7f",
+  `yellow`       = "#ffc000",
+  `purple`       = "#7030a0",
+  `med purple`   = "#5753d0",
+  `med pink`     = "#f75dbe",
+  `med blue`     = "#5cd3ff",
+  `med grey`     = "#a5a7a5",
+  `light purple` = "#c7c6ef",
+  `light pink`   = "#fcc9e9",
+  `light blue`   = "#c9f0ff",
+  `light grey`   = "#dddedd"
+  )
+# Function to extract Mount Sinai colors as hex codes
+# Use Character names of MountSinai_colors
+MountSinai_cols <- function(...) {
+  cols <- c(...)
+  
+  if (is.null(cols))
+    return (MountSinai_colors)
+  
+  MountSinai_colors[cols]
+}
+# Color Function that can be used to call all colors is "MountSinai_cols()"
+# Use in ggplot 
+  #MountSinai_cols()       # will provide all colors and their hex codes in a table 
+  #MountSinai_cols("pink") # will provide color name and the hex code for the pink color
+# Create palettes 
+MountSinai_palettes <- list(
+  `all`   = MountSinai_cols("dark purple","dark pink","dark blue","dark grey",
+                            "med purple","med pink","med blue","med grey", 
+                            "light purple","light pink","light blue","light grey"),
+  
+  `main`  = MountSinai_cols("dark purple","dark pink","dark blue","dark grey"),
+  
+  `purple`  = MountSinai_cols("dark purple","med purple","light purple"),
+  
+  `pink`  = MountSinai_cols("dark pink","med pink","light pink"),
+  
+  `blue`  = MountSinai_cols("dark blue", "med blue", "light blue"),
+  
+  `grey`  = MountSinai_cols("dark grey", "med grey", "light grey"),
+  
+  `purpleGrey` = MountSinai_cols("dark purple", "dark grey"),
+  
+  `pinkBlue` = MountSinai_cols("dark pink", "dark blue")
+  
+)
+# MountSinai_palettes
+# Return function to interpolate a Mount Sinai color palette
+# default value is the main palette, reverse = True will change the order
+MountSinai_pal <- function(palette = "all", reverse = FALSE, ...) {
+  pal <- MountSinai_palettes[[palette]]
+  
+  if (reverse) pal <- rev(pal)
+  
+  colorRampPalette(pal, ...)
+}
+# Scale Function for ggplot can be used instead of scale_color_manual
+scale_color_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FALSE, ...) {
+  pal <- MountSinai_pal(palette = palette, reverse = reverse)
+  
+  if (discrete) {
+    discrete_scale("colour", paste0("MountSinai_", palette), palette = pal, ...)
+  } else {
+    scale_color_gradientn(colours = pal(256), ...)
+  }
+}
+# Scale Fill for ggplot insetead of scale_fill_manual 
+scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FALSE, ...) {
+  pal <- MountSinai_pal(palette = palette, reverse = reverse)
+  if (discrete) {
+    discrete_scale("fill", paste0("MountSinai_", palette), palette = pal, ...)
+  } else {
+    scale_fill_gradientn(colours = pal(256), ...)
+  }
+}
+# Use in ggplot 
+  # scale_color_MountSinai("main")
+```
+
+
+```{r Global Variables, echo = FALSE, warning = FALSE, message = FALSE}
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+not_all_na <- function(x) any(!is.na(x))
+not_any_na <- function(x) all(!is.na(x))
+
+```
+
+
+```{r Connect to Data Source, echo = FALSE, warning = FALSE, message = FALSE}
+
+# Connection to Oracle DB ------------------------------------------------------
+conn1 <- dbPool(drv = odbc(), dsn = "OAO Cloud DB SoYoun", timeout = 30)
+conn2 <- dbConnect(odbc(), 
+                  "Clarity_prod", 
+                  uid = "kweons01" , 
+                  pwd = "kweons01123$")
+
+conn3 <- dbConnect(odbc(),
+                    Driver = "SQLServer",
+                    # Server = "10.2.42.69", # old server
+                    Server = "datahub-synapse.sql.azuresynapse.net",
+                    database = "datahub_epic_dw",
+                    UID = "MSS_USER",
+                    PWD = "Apple_Bees456$",
+                    Port = 1433)
+
+
+
+fpax_tbl <- tbl(conn1, "FPAX_MERGED_DETAIL")
+clarity_ser_tbl <- tbl(conn2, "CLARITY_SER")
+clarity_ser_2_tbl <- tbl(conn2, "CLARITY_SER_2")
+
+msx_ip_conn <- tbl(conn3, dbplyr::ident_q('"MSX"."MSX_IP_OUTPUT"'))
+msx_op_conn <- tbl(conn3, dbplyr::ident_q('"MSX"."MSX_OP_OUTPUT"'))
+
+```
+
+
+```{r FPAX Data Processing}
+
+fpax_data <- fpax_tbl %>%
+  filter(SERVICE_YEAR >= 2023) %>%
+  filter(is.na(FPSC_DEPARTMENT_DESC) | FPSC_DEPARTMENT_DESC != "UNKNOWN DEPT") %>%
+  group_by(SERVICE_YEAR, NPI, MD_NAME, SERVICE_SITE_DESC, CPT_CATEGORY, MRN, CUR_MRN, SERVICE_DATE) %>%
+  summarise(UNIT_NUM = sum(UNIT_NUM, na.rm = T),
+            WRVU_NUM = sum(WRVU_NUM, na.rm = T),
+            CALC_PAYMENT_AMT = sum(CALC_PAYMENT_AMT, na.rm = T)) %>%
+  group_by(NPI) %>%
+  mutate(total_payments = sum(CALC_PAYMENT_AMT, na.rm = T)) %>%
+  filter(total_payments > 0) %>%
+  dplyr::select(-total_payments) %>%
+  collect()
+
+fpax_data_summary <- fpax_data %>%
+  # mutate(SERVICE_SITE_DESC_GRP = case_when(str_detect(SERVICE_SITE_DESC, "Emergency") ~ "ER",
+  #                                          str_detect(SERVICE_SITE_DESC, "Outpatient") ~ "Outpatient Hospital",
+  #                                          str_detect(SERVICE_SITE_DESC, "Office") ~ "Office",
+  #                                          str_detect(SERVICE_SITE_DESC, "Inpatient") & str_detect(SERVICE_SITE_DESC, "Inpatient") ~ "Inpatient",
+  #                                          TRUE ~ "Other Place of Service")) %>%
+  mutate(SERVICE_SITE_DESC_CPT_GRP = case_when(str_detect(SERVICE_SITE_DESC, "Emergency") ~ "ER",
+                                           str_detect(SERVICE_SITE_DESC, "Outpatient") ~ "Hospital Outpatient",
+                                           str_detect(SERVICE_SITE_DESC, "Office") ~ "Office",
+                                           str_detect(SERVICE_SITE_DESC, "Inpatient") & str_detect(CPT_CATEGORY, "SURGERY") ~ "Inpatient-Surgery",
+                                           str_detect(SERVICE_SITE_DESC, "Inpatient") & !str_detect(CPT_CATEGORY, "SURGER") ~ "Inpatient",
+                                           TRUE ~ "Other Place of Service")) %>%
+  group_by(NPI, MD_NAME, SERVICE_SITE_DESC_CPT_GRP, SERVICE_YEAR, MRN, CUR_MRN, SERVICE_DATE) %>%
+  summarise(UNIT_NUM = sum(UNIT_NUM, na.rm = T),
+            WRVU_NUM = sum(WRVU_NUM, na.rm = T),
+            CALC_PAYMENT_AMT = sum(CALC_PAYMENT_AMT, na.rm = T))
+
+
+```
+
+
+```{r MSX Data}
+
+total_dsch <- msx_ip_conn %>%
+  filter(FISCAL_YR_MSX >= 2023) %>%
+  filter(TOTAL_CHARGES_MSX > 0) %>% 
+  group_by(MSMRN, CUR_MRN, ADMIT_DT_SRC, DSCH_DT_SRC) %>%
+  summarise(discharge = 1) %>%
+  collect()
+
+
+total_case <- msx_ip_conn %>%
+  filter(FISCAL_YR_MSX >= 2023) %>%
+  filter(TOTAL_CHARGES_MSX > 0) %>% 
+  filter(LVL1_SURGERY_SRC >0 | LVL1_TRANSPLANT_SRC >0) %>%
+  group_by(MSMRN, CUR_MRN, ADMIT_DT_SRC, DSCH_DT_SRC) %>%
+  summarise(case = 1) %>%
+  collect()
+
+total_ip <- merge(total_dsch, total_case, all = T)
+
+total_ip_merged <- total_ip %>%
+  filter(!is.na(CUR_MRN)) %>%
+  mutate(ADMIT_DT_SRC = as.Date(ADMIT_DT_SRC),
+         DSCH_DT_SRC = as.Date(DSCH_DT_SRC)) %>%
+  mutate(unique_IP_ID = paste0(CUR_MRN, ADMIT_DT_SRC, DSCH_DT_SRC))
+
+```
+
+
+```{r MSX and FPAX Merged}
+
+msx_fpax_merged <- merge(fpax_data_summary, total_ip_merged, 
+                         by = c("CUR_MRN"), all = TRUE)
+
+msx_fpax_merged <- msx_fpax_merged %>%
+  mutate(SERVICE_DATE = as.Date(SERVICE_DATE)) %>%
+  filter(SERVICE_DATE < as.Date("2024-12-01")) %>%
+  mutate(total_dsch_vol = case_when(discharge == 1 & str_detect(SERVICE_SITE_DESC_CPT_GRP, "Inpatient") & between(SERVICE_DATE, ADMIT_DT_SRC, DSCH_DT_SRC) ~ 1,
+                                    TRUE ~ 0),
+         total_case_vol = case_when(case == 1 & str_detect(SERVICE_SITE_DESC_CPT_GRP, "Inpatient-Surgery") & between(SERVICE_DATE, ADMIT_DT_SRC, DSCH_DT_SRC) ~ 1,
+                                    TRUE ~ 0)) %>%
+  ungroup() %>%
+  group_by(unique_IP_ID) %>%
+  mutate(total_cosurgeon_case = case_when(total_case_vol == 1 ~ n_distinct(NPI[total_case_vol==1]),
+                                          TRUE ~ 0))
+
+
+# Count Total Discharges and Cases
+msx_fpax_merged_summary <- msx_fpax_merged %>%
+  group_by(NPI, MD_NAME, SERVICE_YEAR, SERVICE_SITE_DESC_CPT_GRP) %>% 
+  summarise(UNIT_NUM = sum(UNIT_NUM, na.rm = T),
+            WRVU_NUM = sum(WRVU_NUM, na.rm = T),
+            CALC_PAYMENT_AMT = sum(CALC_PAYMENT_AMT, na.rm = T),
+            DISTINCT_MRN_SERVICEDT = n_distinct(MRN, SERVICE_DATE),
+            DISTINCT_DISCHARGES = n_distinct(unique_IP_ID[total_dsch_vol==1]),
+            DISTINCT_CASES = n_distinct(unique_IP_ID[total_case_vol==1]),
+            DISTINCT_COSURGEON_CASES = n_distinct(unique_IP_ID[total_cosurgeon_case>1]))
+         
+
+require(openxlsx)
+write.xlsx(msx_fpax_merged_summary, "Physician Paymnts, WRVUs, Discharges Jan23_Nov24.xlsx")
+
+
+
+
+msx_fpax_merged_check <- msx_fpax_merged %>%
+  filter(NPI == "1003014267")
+
+msx_fpax_merged_summary_check <- msx_fpax_merged_summary %>%
+  filter(NPI == "1003014267")
+
+data_list <- list("msx_fpax_merged" = msx_fpax_merged_check,
+                  "msx_fpax_merged_summary" = msx_fpax_merged_summary_check)
+
+write.xlsx(data_list, "MSX_FPAX_Audit.xlsx")
+
+```
+
+
